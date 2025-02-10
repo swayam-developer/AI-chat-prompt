@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect, useCallback } from "react";
 import { assets } from "../../assets/assets";
-import "./Main.css";
+import "../Main/Main.css";
 import { AppContext } from "../../Context/Context";
 import run from "../../config/gemini";
 import { FaMoon } from "react-icons/fa";
