@@ -3,12 +3,9 @@ import { assets } from "../../assets/assets";
 import "../Main/Main.css";
 import { AppContext } from "../../Context/Context";
 import run from "../../config/gemini";
-import { FaMoon } from "react-icons/fa";
 
 const Main = () => {
   const {
-    isDarkMode,
-    toggleDarkMode,
     displayedText,
     recentPrompt,
     setShowResult,
@@ -62,26 +59,12 @@ const Main = () => {
   };
 
   return (
-    <div className={`main ${isDarkMode ? "dark-mode" : ""}`}>
+    <div className="main">
       <div className="navbar">
         <p>
           <img className="icon" src={assets.gemini_icon} alt="" />
           Gemini
         </p>
-        <div className="toggle-container">
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={isDarkMode}
-              onChange={toggleDarkMode}
-            />
-            <span className="slider round"> </span> {/* The slider */}
-          </label>
-          <FaMoon
-            className="toggle-icon"
-            style={{ color: isDarkMode ? "skyblue" : "gold" }}
-          />
-        </div>
         <img src={assets.user_icon} alt="User Profile" />
       </div>
 

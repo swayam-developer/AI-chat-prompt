@@ -3,13 +3,8 @@ import run from "../config/gemini";
 
 export const AppContext = createContext();
 
-const AppProvider = ( {children} ) => {
-  const getInitialTheme = useCallback(() => {
-    const storedTheme = localStorage.getItem("theme");
-    return storedTheme === null ? false : JSON.parse(storedTheme);
-  }, []);
+const AppProvider = ({ children }) => {
 
-  const [isDarkMode, setIsDarkMode] = useState(() => getInitialTheme());
   const [input, setInput] = useState("");
   const [recentPrompt, setRecentPrompt] = useState("");
   const [showResult, setShowResult] = useState(false);
@@ -17,11 +12,6 @@ const AppProvider = ( {children} ) => {
   const [resultData, setResultData] = useState("");
   const [displayedText, setDisplayedText] = useState("");
   const typingEffectTimeoutRef = useRef(null);
-
-  useEffect(() => {
-    localStorage.setItem("theme", JSON.stringify(isDarkMode));
-    document.body.classList.toggle("dark-mode", isDarkMode);
-  }, [isDarkMode]);
 
   const startTypingEffect = useCallback((text) => {
     // useCallback here
@@ -54,17 +44,29 @@ const AppProvider = ( {children} ) => {
     return text.replace(/\n/g, "<br/>");
   };
 
+  // Redirect to home page on new chat
   const newChat = () => {
     setLoading(false);
     setShowResult(false);
     setInput("");
     setResultData("");
     setDisplayedText("New Chat, Ask Gemini...");
+    window.location.pathname = "/";
   };
 
+  // Send prompt on Enter key
+  const onKeyUp = (e) => {
+    if (e.key === "Enter" && input.trim()) {
+      onSent(input.trim());
+      setRecentPrompt((prev) => [input.trim(), ...prev]);
+    }
+  };
+
+  // Update recentPrompts when prompt is sent via other means
   const onSent = useCallback(
     async (prompt) => {
       setRecentPrompt(prompt);
+      setRecentPrompt((prev) => [prompt, ...prev]);
       setShowResult(true);
       setLoading(true);
       setInput("");
@@ -84,14 +86,8 @@ const AppProvider = ( {children} ) => {
     [run, setLoading, setShowResult, setResultData]
   );
 
-  const toggleDarkMode = useCallback(() => {
-    setIsDarkMode((prevMode) => !prevMode);
-  }, []);
-
   const values = {
     input,
-    isDarkMode,
-    toggleDarkMode,
     setInput,
     recentPrompt,
     setRecentPrompt,
@@ -104,7 +100,9 @@ const AppProvider = ( {children} ) => {
     displayedText,
     onSent,
     newChat,
+    onKeyUp,
   };
+
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

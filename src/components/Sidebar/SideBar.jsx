@@ -5,7 +5,7 @@ import { AppContext } from "../../Context/Context";
 
 const SideBar = () => {
   const [extended, setExtended] = useState(false);
-  const { newChat } = useContext(AppContext);
+  const { newChat, recentPrompt } = useContext(AppContext);
   return (
     <div className={`sidebar ${extended ? "extended" : ""}`}>
       {/* Top Section with Menu */}
@@ -31,7 +31,7 @@ const SideBar = () => {
           {/* Recent section */}
           <div className="recent-entry">
             <img src={assets.message_icon} alt="Message" />
-            <p>No recent Prompts...</p>
+            <p>{recentPrompt || "No recent search"}</p>
           </div>
         </div>
       )}

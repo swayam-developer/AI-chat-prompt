@@ -5,6 +5,12 @@
   justify-content: space-between;
   background-color: rgb(238, 245, 245);
   padding: 25px 15px;
+  /* Prevent sidebar from stretching horizontally */
+  max-width: 290px;
+  min-width: 240px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* Sidebar Icons */
@@ -35,15 +41,16 @@
 
 .sidebar .new-chat:hover {
   background-color: #d8dde6;
-}
-.sidebar .new-chat:hover {
   color: #555;
 }
+
 /* Recent Chats Section */
 .sidebar .recent {
   display: flex;
   flex-direction: column;
   animation: fadeIn 1.5s;
+  overflow-y: auto;
+  max-height: 50vh;
 }
 
 .sidebar .recent-title {
@@ -52,6 +59,7 @@
   color: #333;
 }
 
+/* Prevent long recent prompt from expanding sidebar */
 .sidebar .recent-entry {
   display: flex;
   align-items: center;
@@ -61,10 +69,21 @@
   color: #282828;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  max-width: 100%;
+  min-width: 0;
+  /* Ensure text truncates */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar .recent-entry > * {
+  min-width: 0;
 }
 
 .sidebar .recent-entry:hover {
   background-color: #e2e6eb;
+  color: #555;
 }
 
 /* Bottom Section (Help, Activity, Settings) */
@@ -88,13 +107,23 @@
 
 .sidebar .bottom-item span {
   flex-grow: 1; /* Ensures text stays on the right */
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar .bottom-item:hover {
   color: #555;
 }
+
 @media(max-width:600px){
   .sidebar {
     display:none;
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px);}
+  to { opacity: 1; transform: translateY(0);}
 }
